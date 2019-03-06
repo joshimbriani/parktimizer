@@ -1,44 +1,25 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Parktimizer
 
-## Available Scripts
+## The Idea 
 
-In the project directory, you can run:
+Parktimizer is a web application currently under development that offers users the ability to create their ideal days at theme parks. Users input the rides that they consider must dos and the rides they can skip and the system generates a minute by minute plan with projected wait times to let users maximize their day at the parks.
 
-### `npm start`
+Currently the application only handles Universal Studios Florida and Islands of Adventure (which happen to be my favorite parks) but I'm working on collecting the data that I'll need for other parks, including Disney and Universal Hollywood.
 
-Runs the app in the development mode.<br>
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## Technical Details
 
-The page will reload if you make edits.<br>
-You will also see any lint errors in the console.
+### Systems
 
-### `npm test`
+Parktimizer consists of a React frontend and a Python/Tensorflow backend.
 
-Launches the test runner in the interactive watch mode.<br>
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+The core of the project is a deep learning model trained on past wait time data on my GTX 1060. In addition to the time data, the model also incorporates weather features as weather and temperature also has an effect on wait times.
 
-### `npm run build`
+### Algorithms
 
-Builds the app for production to the `build` folder.<br>
-It correctly bundles React in production mode and optimizes the build for the best performance.
+In order to create an optimal path, we would reduce this problem down to the Traveling Salesman Problem. Since a true solution would require factorial time and the amount of "cities" is on the order of 15-20, a brute force algorithm is impractical, especially when you consider that at each "stop", we'd need to query our ML model to get a prediction.
 
-The build is minified and the filenames include the hashes.<br>
-Your app is ready to be deployed!
+So I have implemented [Christofides algoritm](https://en.wikipedia.org/wiki/Christofides_algorithm) as an approximation to the brute force algorithm. O(n^4) is reasonable considering an n of 15 or 20.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## Progress
 
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+I initially intended to implement this using Tensorflow 1.0 but with 2.0 released recently, I'm learning 2.0 so that I can implement it in that.
